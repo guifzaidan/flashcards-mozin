@@ -1,26 +1,346 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-poppins), sans-serif;
+  }
+  html {
+    font-family: var(--font-poppins), sans-serif;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.font-lora { font-family: var(--font-poppins), sans-serif; }
+
+/* ─── Keyframes ─────────────────────────────────────────
+   Regra: animar APENAS transform + opacity → composited pela GPU.
+   Nunca animar box-shadow, width, height, top, left.          */
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-out-left {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-60px); }
+}
+
+@keyframes slide-out-right {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(60px); }
+}
+
+@keyframes bounce-in {
+  0%   { opacity: 0; transform: scale(0.5); }
+  60%  { opacity: 1; transform: scale(1.06); }
+  80%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25%       { transform: rotate(-5deg); }
+  75%       { transform: rotate(5deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-7px); }
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+@keyframes spin-cw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes stagger-slide {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Cartoon button press ────────────────────────────
+   Só transform é animado — GPU puro, sem layout thrash.
+   box-shadow fica ESTÁTICO; apenas o elemento se move.   */
+
+.btn-cartoon {
+  will-change: transform;
+  transform: translateZ(0);           /* força camada GPU */
+  transition: transform 0.13s cubic-bezier(.175,.885,.32,1.275);
+  user-select: none;
+  cursor: pointer;
+  backface-visibility: hidden;
+}
+.btn-cartoon:hover  { transform: translate(-2px, -3px); }
+.btn-cartoon:active { transform: translate(2px, 2px); transition-duration: 0.06s; }
+
+/* ─── Deck card — brutalist lift ────────────────────────
+   A sombra (.deck-shadow) é uma div estática separada.
+   Só o card (.deck-card) se move — a distância entre os
+   dois aumenta, criando o efeito brutalista de levitar.   */
+
+.deck-card {
+  will-change: transform;
+  transform: rotate(var(--card-rot, 0deg)) translate(0, 0) translateZ(0);
+  transition: transform 0.22s cubic-bezier(.175,.885,.32,1.275);
+  backface-visibility: hidden;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Hover: levanta suavemente */
+.deck-card:hover {
+  transform: rotate(0deg) translate(-3px, -7px) translateZ(0);
+}
+
+/* Active / clique: levanta bem mais — efeito brutalista */
+.deck-card:active {
+  transform: rotate(-1deg) translate(-6px, -14px) scale(1.015) translateZ(0);
+  transition-duration: 0.07s;
+}
+
+/* Shine sweep */
+.deck-card .shine {
+  position: absolute; inset: 0;
+  background: linear-gradient(108deg, transparent 35%, rgba(255,255,255,0.55) 50%, transparent 65%);
+  transform: translateX(-110%) skewX(-12deg);
+  transition: transform 0s;
+  pointer-events: none; z-index: 2; border-radius: inherit;
+}
+.deck-card:hover .shine {
+  transform: translateX(130%) skewX(-12deg);
+  transition: transform 0.55s cubic-bezier(.4,0,.2,1);
+}
+
+/* Badge pop no hover */
+.deck-card:hover .count-pill { animation: pop 0.32s cubic-bezier(.175,.885,.32,1.275); }
+
+/* Stripe expande no hover */
+.deck-card .accent-stripe {
+  transform-origin: left center;
+  transition: transform 0.22s cubic-bezier(.175,.885,.32,1.275);
+  will-change: transform;
+}
+.deck-card:hover .accent-stripe  { transform: scaleX(1.6) translateZ(0); }
+.deck-card:active .accent-stripe { transform: scaleX(2.0) translateZ(0); }
+
+/* ─── Stagger children ───────────────────────────────── */
+
+.stagger-children > * {
+  will-change: transform, opacity;
+  animation: stagger-slide 0.38s cubic-bezier(.175,.885,.32,1.275) both;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.04s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.10s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.16s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.22s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.28s; }
+.stagger-children > *:nth-child(n+6) { animation-delay: 0.34s; }
+
+/* ─── Icon hover micro-animations ───────────────────── */
+
+.icon-spin svg,
+.icon-wiggle svg,
+.icon-pop svg { will-change: transform; }
+
+.icon-spin:hover   svg { animation: spin-cw 0.45s ease; }
+.icon-wiggle:hover svg { animation: wiggle  0.45s ease; }
+.icon-pop:hover    svg { animation: pop     0.35s ease; }
+.icon-float            { animation: float 3.2s ease-in-out infinite; }
+
+/* ─── Study card entrance / exit ────────────────────── */
+
+.card-enter      { will-change: transform, opacity; animation: slide-in-right 0.28s cubic-bezier(.175,.885,.32,1.275) both; }
+.card-exit-left  { will-change: transform, opacity; animation: slide-out-left  0.20s ease forwards; }
+.card-exit-right { will-change: transform, opacity; animation: slide-out-right 0.20s ease forwards; }
+
+/* ─── Hero stickers ──────────────────────────────────── */
+
+.hero-sticker {
+  transition: transform 0.18s cubic-bezier(.175,.885,.32,1.275);
+  backface-visibility: hidden;
+}
+/* No hover o sticker levanta e endireita — brutalista */
+.hero-sticker:hover {
+  transform: rotate(0deg) translate(-3px, -6px) scale(1.06) translateZ(0) !important;
+}
+.hero-sticker:active {
+  transform: rotate(0deg) translate(-5px, -11px) scale(1.08) translateZ(0) !important;
+  transition-duration: 0.07s !important;
+}
+
+/* Entrada em cascata */
+@keyframes sticker-in {
+  0%   { opacity: 0; transform: rotate(var(--sr, 0deg)) scale(0.55) translateY(30px); }
+  65%  { opacity: 1; transform: rotate(var(--sr, 0deg)) scale(1.07) translateY(-4px); }
+  85%  { transform: rotate(var(--sr, 0deg)) scale(0.97) translateY(1px); }
+  100% { transform: rotate(var(--sr, 0deg)) scale(1) translateY(0); }
+}
+
+.stagger-hero-1 { animation: sticker-in 0.55s cubic-bezier(.175,.885,.32,1.275) 0.05s both; --sr: -2deg; }
+.stagger-hero-2 { animation: sticker-in 0.55s cubic-bezier(.175,.885,.32,1.275) 0.15s both; --sr:  5deg; }
+.stagger-hero-3 { animation: sticker-in 0.55s cubic-bezier(.175,.885,.32,1.275) 0.25s both; --sr: -3deg; }
+.stagger-hero-4 { animation: sticker-in 0.55s cubic-bezier(.175,.885,.32,1.275) 0.35s both; --sr:  9deg; }
+
+/* ─── Dialog animations ─────────────────────────────── */
+
+@keyframes dialog-in {
+  from { opacity: 0; transform: translate(-50%, -44%) scale(0.93); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes dialog-out {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to   { opacity: 0; transform: translate(-50%, -46%) scale(0.94); }
+}
+
+@keyframes overlay-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes overlay-out { from { opacity: 1; } to { opacity: 0; } }
+
+.dialog-popup[data-open]   { animation: dialog-in  0.28s cubic-bezier(.175,.885,.32,1.275) both; }
+.dialog-popup[data-closed] { animation: dialog-out 0.18s ease both; }
+
+[data-slot="dialog-overlay"][data-open]   { animation: overlay-in  0.2s ease both; }
+[data-slot="dialog-overlay"][data-closed] { animation: overlay-out 0.18s ease both; }
+
+/* ─── Mobile touch optimizations ────────────────────── */
+
+/* Remove 300ms tap delay everywhere */
+button, a, [role="button"] { touch-action: manipulation; }
+
+/* On touch devices: show card actions without hover */
+@media (hover: none) {
+  .card-actions { opacity: 1 !important; }
+  .deck-card { transform: none !important; transition: none !important; }
 }
