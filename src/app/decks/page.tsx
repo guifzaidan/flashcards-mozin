@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getDecksWithCardCount } from "@/lib/queries/decks";
 import { getAllCards } from "@/lib/queries/cards";
 import { DeckSearchFilter } from "@/components/decks/DeckSearchFilter";
