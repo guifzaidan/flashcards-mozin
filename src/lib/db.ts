@@ -1,13 +1,27 @@
-import { createClient } from "@libsql/client";
+import { createClient, type Client } from "@libsql/client";
 
-if (!process.env.TURSO_DATABASE_URL || !process.env.TURSO_AUTH_TOKEN) {
-  throw new Error(
-    "Variáveis de ambiente TURSO_DATABASE_URL e TURSO_AUTH_TOKEN não configuradas. " +
-    "Adicione-as no painel da Vercel em Settings → Environment Variables."
-  );
+let _db: Client | null = null;
+
+export function getDb(): Client {
+  if (_db) return _db;
+
+  const url = process.env.TURSO_DATABASE_URL;
+  const authToken = process.env.TURSO_AUTH_TOKEN;
+
+  if (!url || !authToken) {
+    throw new Error(
+      "TURSO_DATABASE_URL e TURSO_AUTH_TOKEN não configurados. " +
+        "Adicione-os em Settings → Environment Variables na Vercel."
+    );
+  }
+
+  _db = createClient({ url, authToken });
+  return _db;
 }
 
-export const db = createClient({
-  url: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN,
+// Atalho para compatibilidade com o código existente
+export const db = new Proxy({} as Client, {
+  get(_target, prop) {
+    return (getDb() as unknown as Record<string, unknown>)[prop as string];
+  },
 });
