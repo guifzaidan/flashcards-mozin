@@ -83,7 +83,7 @@ export function CardTable({ cards, deckId }: Props) {
               <div>
                 <p className="text-[10px] font-black uppercase tracking-widest text-gray-300 mb-1">Frente</p>
                 <p
-                  className="text-[#133266] font-semibold whitespace-pre-wrap leading-snug"
+                  className="text-[#133266] font-semibold leading-snug line-clamp-4"
                   style={{ fontFamily: "var(--font-caveat)", fontSize: "1.05rem" }}
                 >
                   {card.front}
@@ -92,10 +92,10 @@ export function CardTable({ cards, deckId }: Props) {
               <div style={{ borderLeft: "2px dashed #e5e7eb", paddingLeft: "1rem" }}>
                 <p className="text-[10px] font-black uppercase tracking-widest text-gray-300 mb-1">Verso</p>
                 <p
-                  className="text-gray-500 whitespace-pre-wrap leading-snug"
+                  className="text-gray-500 leading-snug line-clamp-4"
                   style={{ fontFamily: "var(--font-caveat)", fontSize: "1.05rem" }}
                 >
-                  {card.back}
+                  {card.back || <span className="italic text-gray-300">sem resposta</span>}
                 </p>
               </div>
             </div>
