@@ -89,7 +89,21 @@ export function PDFImporter({ deckId, deckName }: Props) {
       const res = await fetch("/api/parse-pdf", { method: "POST", body: fd });
       const data = await res.json();
       if (!res.ok || data.error) throw new Error(data.error || "Erro ao processar PDF");
-      const qs = extractQuestions(data.markdown as string);
+
+      // Usa questões pré-processadas pelo servidor se disponíveis (mais confiável)
+      let qs: Question[];
+      if (data.questions && Array.isArray(data.questions) && data.questions.length > 1) {
+        qs = (data.questions as { front: string; back: string }[]).map((q, i) => ({
+          id: `q${i}`,
+          front: q.front,
+          back: q.back ?? "",
+          selected: false,
+          expanded: false,
+        }));
+      } else {
+        qs = extractQuestions(data.markdown as string);
+      }
+
       if (qs.length === 0) throw new Error("Nenhuma questão detectada no PDF. Tente um arquivo diferente.");
       setQuestions(qs);
       setStep("select");
