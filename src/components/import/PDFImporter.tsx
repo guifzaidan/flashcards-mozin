@@ -277,43 +277,45 @@ export function PDFImporter({ deckId, deckName }: Props) {
             className="bg-white rounded-xl overflow-hidden"
             style={{
               border: `2px solid ${q.selected ? "#133266" : "#e5e7eb"}`,
-              boxShadow: q.selected ? "2px 2px 0 #133266" : "none",
+              boxShadow: q.selected ? "3px 3px 0 #133266" : "none",
               transition: "border-color 0.15s, box-shadow 0.15s",
+              minHeight: "64px",
             }}
           >
-            {/* Linha principal: checkbox + número + prévia + chevron */}
-            <div className="flex items-start gap-2 p-3">
-              <button
-                onClick={() => toggle(q.id)}
-                className="mt-1 shrink-0"
-                aria-label={q.selected ? "Desmarcar" : "Selecionar"}
+            {/* Linha principal — altura mínima garantida */}
+            <div
+              className="flex items-center gap-3 px-3 cursor-pointer"
+              style={{ minHeight: "64px" }}
+              onClick={() => toggle(q.id)}
+            >
+              {/* Checkbox — área clicável própria */}
+              <div
+                className="shrink-0"
+                onClick={(e) => { e.stopPropagation(); toggle(q.id); }}
               >
                 {q.selected
-                  ? <CheckSquare size={20} color="#133266" strokeWidth={2.5} />
-                  : <Square size={20} color="#d1d5db" strokeWidth={2} />}
-              </button>
-
-              <div className="flex-1 min-w-0 cursor-pointer" onClick={() => toggle(q.id)}>
-                <span
-                  className="text-xs font-black text-gray-400 mr-1"
-                  style={{ fontFamily: "var(--font-caveat)" }}
-                >
-                  {i + 1}.
-                </span>
-                <span
-                  className={`text-sm font-semibold text-[#133266] leading-snug ${q.expanded ? "" : "line-clamp-3"}`}
-                  style={{ fontFamily: "var(--font-caveat)", fontSize: "0.95rem" }}
-                >
-                  {q.front}
-                </span>
+                  ? <CheckSquare size={22} color="#133266" strokeWidth={2.5} />
+                  : <Square size={22} color="#d1d5db" strokeWidth={2} />}
               </div>
 
+              {/* Número + texto da questão */}
+              <div className="flex-1 min-w-0 py-3">
+                <p
+                  className={`text-sm font-medium text-[#133266] leading-snug ${q.expanded ? "" : "line-clamp-3"}`}
+                  style={{ fontFamily: "var(--font-caveat)", fontSize: "1rem" }}
+                >
+                  <span className="font-black text-gray-300 mr-1 select-none">{i + 1}.</span>
+                  {q.front || <span className="text-gray-300 italic">Questão {i + 1}</span>}
+                </p>
+              </div>
+
+              {/* Botão expandir */}
               <button
-                onClick={() => toggleExpand(q.id)}
-                className="shrink-0 mt-1 text-gray-300 hover:text-[#133266] transition-colors"
-                aria-label={q.expanded ? "Colapsar" : "Expandir"}
+                className="shrink-0 p-1 text-gray-300 hover:text-[#133266] transition-colors"
+                onClick={(e) => { e.stopPropagation(); toggleExpand(q.id); }}
+                aria-label={q.expanded ? "Colapsar" : "Expandir para editar"}
               >
-                {q.expanded ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+                {q.expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </button>
             </div>
 
@@ -321,7 +323,7 @@ export function PDFImporter({ deckId, deckName }: Props) {
             {q.expanded && (
               <div className="px-3 pb-3 flex flex-col gap-2 border-t border-gray-100 pt-3">
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-300 mb-1">Frente (questão)</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Frente (questão)</p>
                   <textarea
                     value={q.front}
                     onChange={(e) => updateFront(q.id, e.target.value)}
@@ -331,7 +333,7 @@ export function PDFImporter({ deckId, deckName }: Props) {
                   />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-300 mb-1">Verso (resposta) — opcional</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Verso (resposta) — opcional</p>
                   <textarea
                     value={q.back}
                     onChange={(e) => updateBack(q.id, e.target.value)}
