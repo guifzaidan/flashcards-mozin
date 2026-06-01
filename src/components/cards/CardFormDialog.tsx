@@ -55,7 +55,7 @@ export function CardFormDialog({ trigger, deckId, card }: Props) {
                 value={front}
                 onChange={(e) => setFront(e.target.value)}
                 placeholder="Escreva a questão ou enunciado..."
-                className="min-h-[90px] resize-none border-0 rounded-none font-medium focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="min-h-[90px] max-h-[40vh] resize-y border-0 rounded-none font-medium focus-visible:ring-0 focus-visible:ring-offset-0"
                 autoFocus
               />
             </div>

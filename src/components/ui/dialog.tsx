@@ -60,11 +60,12 @@ function DialogContent({
       >
         {/* Card com estilo cartoon */}
         <div
-          className="relative bg-white w-full p-5"
+          className="relative bg-white w-full p-5 overflow-y-auto"
           style={{
             border: "3px solid #133266",
             borderRadius: "20px",
             boxShadow: "6px 6px 0 #133266",
+            maxHeight: "90vh",
           }}
         >
           {children}
