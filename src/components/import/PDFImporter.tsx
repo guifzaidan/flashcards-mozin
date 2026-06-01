@@ -34,26 +34,17 @@ function extractQuestions(markdown: string): Question[] {
     }
   }
 
-  // Padrão 2: números sequenciais inline (sem quebra de linha obrigatória)
-  // Útil quando o extrator de PDF une o texto sem newlines entre questões
-  const numberPositions: number[] = [];
-  const inlinePattern = /(?<![0-9])(\d{1,3})[.)]\s+(?=[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ])/g;
-  let m: RegExpExecArray | null;
-  while ((m = inlinePattern.exec(markdown)) !== null) {
-    const num = parseInt(m[1]);
-    if (num >= 1 && num <= 200) numberPositions.push(m.index);
-  }
-  if (numberPositions.length > 1) {
-    return numberPositions.map((pos, i) => {
-      const end = i + 1 < numberPositions.length ? numberPositions[i + 1] : markdown.length;
-      return {
-        id: `q${i}`,
-        front: markdown.slice(pos, end).trim(),
-        back: "",
-        selected: false,
-        expanded: false,
-      };
-    });
+  // Padrão 2: marcadores [Q1], [Q2]... usados no PDF gerado automaticamente
+  const qMarkerPattern = /\[Q(\d+)\]\s*([\s\S]+?)(?=\[Q\d+\]|$)/g;
+  const qMarkerMatches = [...markdown.matchAll(qMarkerPattern)];
+  if (qMarkerMatches.length > 1) {
+    return qMarkerMatches.map((m, i) => ({
+      id: `q${i}`,
+      front: m[2].trim(),
+      back: "",
+      selected: false,
+      expanded: false,
+    }));
   }
 
   // Fallback: divide por parágrafos (linha em branco)
