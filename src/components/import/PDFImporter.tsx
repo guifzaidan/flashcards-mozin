@@ -230,7 +230,7 @@ export function PDFImporter({ deckId, deckName }: Props) {
           </p>
           <p className="text-xs text-gray-400 font-medium">{fileName}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <button onClick={selectAll}
             className="text-xs font-bold text-[#133266] underline hover:no-underline">
             Selecionar todas
@@ -240,42 +240,70 @@ export function PDFImporter({ deckId, deckName }: Props) {
             className="text-xs font-bold text-gray-400 underline hover:no-underline">
             Limpar
           </button>
+          <span className="text-gray-300">·</span>
+          <button
+            onClick={() => setQuestions(qs => qs.map(q => ({ ...q, expanded: true })))}
+            className="text-xs font-bold text-gray-400 underline hover:no-underline">
+            Expandir todas
+          </button>
+          <span className="text-gray-300">·</span>
+          <button
+            onClick={() => setQuestions(qs => qs.map(q => ({ ...q, expanded: false })))}
+            className="text-xs font-bold text-gray-400 underline hover:no-underline">
+            Colapsar
+          </button>
         </div>
       </div>
 
       {/* Lista de questões */}
-      <div className="flex flex-col gap-3 max-h-[60vh] overflow-y-auto pr-1">
+      <div className="flex flex-col gap-2 max-h-[70vh] overflow-y-auto pr-1">
         {questions.map((q, i) => (
           <div
             key={q.id}
-            className="bg-white rounded-2xl overflow-hidden"
+            className="bg-white rounded-xl overflow-hidden"
             style={{
-              border: `2.5px solid ${q.selected ? "#133266" : "#e5e7eb"}`,
-              boxShadow: q.selected ? "3px 3px 0 #133266" : "none",
+              border: `2px solid ${q.selected ? "#133266" : "#e5e7eb"}`,
+              boxShadow: q.selected ? "2px 2px 0 #133266" : "none",
               transition: "border-color 0.15s, box-shadow 0.15s",
             }}
           >
-            {/* Row: checkbox + texto + expand */}
-            <div className="flex items-start gap-3 p-3">
-              <button onClick={() => toggle(q.id)} className="mt-0.5 shrink-0">
-                {q.selected
-                  ? <CheckSquare size={18} color="#133266" strokeWidth={2.5} />
-                  : <Square size={18} color="#d1d5db" strokeWidth={2} />}
-              </button>
-              <p
-                className="flex-1 text-sm font-semibold text-[#133266] leading-snug line-clamp-2 cursor-pointer"
+            {/* Linha principal: checkbox + número + prévia + chevron */}
+            <div className="flex items-start gap-2 p-3">
+              <button
                 onClick={() => toggle(q.id)}
-                style={{ fontFamily: "var(--font-caveat)", fontSize: "1rem" }}
+                className="mt-1 shrink-0"
+                aria-label={q.selected ? "Desmarcar" : "Selecionar"}
               >
-                <span className="text-gray-300 mr-1">{i + 1}.</span>
-                {q.front}
-              </p>
-              <button onClick={() => toggleExpand(q.id)} className="shrink-0 text-gray-300 hover:text-[#133266] transition-colors">
-                {q.expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                {q.selected
+                  ? <CheckSquare size={20} color="#133266" strokeWidth={2.5} />
+                  : <Square size={20} color="#d1d5db" strokeWidth={2} />}
+              </button>
+
+              <div className="flex-1 min-w-0 cursor-pointer" onClick={() => toggle(q.id)}>
+                <span
+                  className="text-xs font-black text-gray-400 mr-1"
+                  style={{ fontFamily: "var(--font-caveat)" }}
+                >
+                  {i + 1}.
+                </span>
+                <span
+                  className={`text-sm font-semibold text-[#133266] leading-snug ${q.expanded ? "" : "line-clamp-3"}`}
+                  style={{ fontFamily: "var(--font-caveat)", fontSize: "0.95rem" }}
+                >
+                  {q.front}
+                </span>
+              </div>
+
+              <button
+                onClick={() => toggleExpand(q.id)}
+                className="shrink-0 mt-1 text-gray-300 hover:text-[#133266] transition-colors"
+                aria-label={q.expanded ? "Colapsar" : "Expandir"}
+              >
+                {q.expanded ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
               </button>
             </div>
 
-            {/* Expanded: editar frente + resposta */}
+            {/* Painel expandido: editar frente + verso */}
             {q.expanded && (
               <div className="px-3 pb-3 flex flex-col gap-2 border-t border-gray-100 pt-3">
                 <div>
@@ -283,8 +311,8 @@ export function PDFImporter({ deckId, deckName }: Props) {
                   <textarea
                     value={q.front}
                     onChange={(e) => updateFront(q.id, e.target.value)}
-                    rows={3}
-                    className="w-full text-sm font-medium text-[#133266] rounded-xl p-2 resize-none outline-none"
+                    rows={5}
+                    className="w-full text-sm font-medium text-[#133266] rounded-xl p-2 resize-y outline-none"
                     style={{ border: "2px solid #133266", fontFamily: "var(--font-caveat)" }}
                   />
                 </div>
@@ -294,8 +322,8 @@ export function PDFImporter({ deckId, deckName }: Props) {
                     value={q.back}
                     onChange={(e) => updateBack(q.id, e.target.value)}
                     placeholder="Deixe em branco para preencher depois..."
-                    rows={2}
-                    className="w-full text-sm font-medium text-gray-500 rounded-xl p-2 resize-none outline-none"
+                    rows={3}
+                    className="w-full text-sm font-medium text-gray-500 rounded-xl p-2 resize-y outline-none"
                     style={{ border: "2px solid #EFC1C4", borderLeft: "4px solid #133266", fontFamily: "var(--font-caveat)" }}
                   />
                 </div>
