@@ -159,12 +159,7 @@ export function PDFImporter({ deckId, deckName }: Props) {
       </div>
 
       <p className="text-xs text-center text-gray-400 font-medium">
-        O PDF será processado com{" "}
-        <a href="https://github.com/microsoft/markitdown" target="_blank" rel="noopener noreferrer"
-           className="underline text-[#133266]">
-          markitdown (Microsoft)
-        </a>
-        {" "}— tudo localmente, nada enviado para nuvem.
+        O texto do PDF é extraído e processado no servidor — o arquivo não é armazenado.
       </p>
     </div>
   );
