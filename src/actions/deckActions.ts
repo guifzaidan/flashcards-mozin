@@ -1,25 +1,28 @@
 "use server";
 
-import { mockDecks, getNextDeckId } from "@/lib/mockStore";
+import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
 export async function createDeck(name: string) {
-  mockDecks.push({
-    id: getNextDeckId(),
-    name: name.trim(),
-    created_at: new Date().toISOString(),
+  await db.execute({
+    sql: "INSERT INTO decks (name) VALUES (?)",
+    args: [name.trim()],
   });
   revalidatePath("/decks");
 }
 
 export async function renameDeck(id: number, name: string) {
-  const deck = mockDecks.find((d) => d.id === id);
-  if (deck) deck.name = name.trim();
+  await db.execute({
+    sql: "UPDATE decks SET name = ? WHERE id = ?",
+    args: [name.trim(), id],
+  });
   revalidatePath("/decks");
 }
 
 export async function deleteDeck(id: number) {
-  const idx = mockDecks.findIndex((d) => d.id === id);
-  if (idx !== -1) mockDecks.splice(idx, 1);
+  await db.execute({
+    sql: "DELETE FROM decks WHERE id = ?",
+    args: [id],
+  });
   revalidatePath("/decks");
 }

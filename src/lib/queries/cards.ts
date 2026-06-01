@@ -1,4 +1,4 @@
-import { mockCards } from "@/lib/mockStore";
+import { db } from "@/lib/db";
 
 export interface Card {
   id: number;
@@ -12,13 +12,22 @@ export interface Card {
 }
 
 export async function getCardsByDeckId(deckId: number): Promise<Card[]> {
-  return mockCards.filter((c) => c.deck_id === deckId);
+  const result = await db.execute({
+    sql: "SELECT * FROM cards WHERE deck_id = ? ORDER BY created_at ASC",
+    args: [deckId],
+  });
+  return result.rows as unknown as Card[];
 }
 
 export async function getCardById(id: number): Promise<Card | null> {
-  return mockCards.find((c) => c.id === id) ?? null;
+  const result = await db.execute({
+    sql: "SELECT * FROM cards WHERE id = ?",
+    args: [id],
+  });
+  return (result.rows[0] as unknown as Card) ?? null;
 }
 
 export async function getAllCards(): Promise<Card[]> {
-  return [...mockCards];
+  const result = await db.execute("SELECT * FROM cards");
+  return result.rows as unknown as Card[];
 }

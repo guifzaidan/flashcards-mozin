@@ -1,4 +1,4 @@
-import { mockDecks, mockCards } from "@/lib/mockStore";
+import { db } from "@/lib/db";
 
 export interface Deck {
   id: number;
@@ -8,12 +8,21 @@ export interface Deck {
 }
 
 export async function getDecksWithCardCount(): Promise<Deck[]> {
-  return mockDecks.map((d) => ({
-    ...d,
-    card_count: mockCards.filter((c) => c.deck_id === d.id).length,
-  }));
+  const result = await db.execute(`
+    SELECT d.id, d.name, d.created_at,
+           COUNT(c.id) as card_count
+    FROM decks d
+    LEFT JOIN cards c ON c.deck_id = d.id
+    GROUP BY d.id
+    ORDER BY d.created_at DESC
+  `);
+  return result.rows as unknown as Deck[];
 }
 
 export async function getDeckById(id: number): Promise<Deck | null> {
-  return mockDecks.find((d) => d.id === id) ?? null;
+  const result = await db.execute({
+    sql: "SELECT * FROM decks WHERE id = ?",
+    args: [id],
+  });
+  return (result.rows[0] as unknown as Deck) ?? null;
 }

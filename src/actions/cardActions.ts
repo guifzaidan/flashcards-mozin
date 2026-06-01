@@ -1,34 +1,29 @@
 "use server";
 
-import { mockCards, getNextCardId } from "@/lib/mockStore";
+import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
 export async function createCard(deckId: number, front: string, back: string) {
-  mockCards.push({
-    id: getNextCardId(),
-    deck_id: deckId,
-    front: front.trim(),
-    back: back.trim(),
-    times_correct: 0,
-    times_incorrect: 0,
-    last_reviewed: null,
-    created_at: new Date().toISOString(),
+  await db.execute({
+    sql: "INSERT INTO cards (deck_id, front, back) VALUES (?, ?, ?)",
+    args: [deckId, front.trim(), back.trim()],
   });
   revalidatePath(`/decks/${deckId}`);
 }
 
 export async function updateCard(id: number, deckId: number, front: string, back: string) {
-  const card = mockCards.find((c) => c.id === id);
-  if (card) {
-    card.front = front.trim();
-    card.back = back.trim();
-  }
+  await db.execute({
+    sql: "UPDATE cards SET front = ?, back = ? WHERE id = ?",
+    args: [front.trim(), back.trim(), id],
+  });
   revalidatePath(`/decks/${deckId}`);
 }
 
 export async function deleteCard(id: number, deckId: number) {
-  const idx = mockCards.findIndex((c) => c.id === id);
-  if (idx !== -1) mockCards.splice(idx, 1);
+  await db.execute({
+    sql: "DELETE FROM cards WHERE id = ?",
+    args: [id],
+  });
   revalidatePath(`/decks/${deckId}`);
 }
 
@@ -38,14 +33,16 @@ export async function saveStudySession(
 ) {
   const now = new Date().toISOString();
   for (const r of results) {
-    const card = mockCards.find((c) => c.id === r.cardId);
-    if (card) {
-      if (r.knew) {
-        card.times_correct += 1;
-      } else {
-        card.times_incorrect += 1;
-      }
-      card.last_reviewed = now;
+    if (r.knew) {
+      await db.execute({
+        sql: "UPDATE cards SET times_correct = times_correct + 1, last_reviewed = ? WHERE id = ?",
+        args: [now, r.cardId],
+      });
+    } else {
+      await db.execute({
+        sql: "UPDATE cards SET times_incorrect = times_incorrect + 1, last_reviewed = ? WHERE id = ?",
+        args: [now, r.cardId],
+      });
     }
   }
   revalidatePath(`/decks/${deckId}`);
