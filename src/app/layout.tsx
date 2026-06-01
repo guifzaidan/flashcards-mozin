@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins, Fredoka } from "next/font/google";
 import "./globals.css";
+import { Mascot } from "@/components/Mascot";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         }}
       >
         <div className="flex-1">{children}</div>
+        <Mascot />
       </body>
     </html>
   );
