@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const pdfParse = require("pdf-parse") as (
-  buf: Buffer
-) => Promise<{ text: string; numpages: number }>;
+import { extractText } from "unpdf";
 
 export const maxDuration = 60;
 
@@ -19,10 +15,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Apenas arquivos PDF são aceitos" }, { status: 400 });
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const data = await pdfParse(buffer);
+    const buffer = new Uint8Array(await file.arrayBuffer());
+    const { text } = await extractText(buffer, { mergePages: true });
 
-    return NextResponse.json({ markdown: data.text });
+    return NextResponse.json({ markdown: text });
   } catch (err: unknown) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Erro inesperado ao processar PDF" },
