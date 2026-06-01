@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import pdfParse from "pdf-parse";
 
 export const maxDuration = 60;
 
@@ -15,9 +16,6 @@ export async function POST(request: NextRequest) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-
-    // Importação dinâmica evita o bug do pdf-parse que lê arquivo de teste no require()
-    const pdfParse = (await import("pdf-parse/lib/pdf-parse.js")).default;
     const data = await pdfParse(buffer);
 
     return NextResponse.json({ markdown: data.text });
